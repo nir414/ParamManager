@@ -9,7 +9,8 @@
             "program": "${workspaceFolder}/main.go",
             "env": {
                 "FYNE_DISABLE_GL": "true",
-                "FYNE_SCALE": "1"
+                "FYNE_SCALE": "1",
+                "FYNE_RENDER": "software"
             },
             "args": [],
             "cwd": "${workspaceFolder}",
