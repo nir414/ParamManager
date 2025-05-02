@@ -2,17 +2,24 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
 // NewSpacer: 빈 공간을 생성하는 함수
 func NewSpacer() *fyne.Container {
 	return container.NewWithoutLayout(layout.NewSpacer())
+}
+
+// createColor: RGBA 값을 간단히 입력하여 color.Color를 생성하는 헬퍼 함수
+func createColor(r, g, b, a uint8) color.Color {
+	return color.RGBA{R: r, G: g, B: b, A: a}
 }
 
 // createVerticalLayout: 수직 레이아웃 생성
@@ -110,8 +117,37 @@ func createScrollableList() *fyne.Container {
 	)
 }
 
+// customTheme: 사용자 정의 테마 구조체
+type customTheme struct{}
+
+func (c customTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) color.Color {
+	if name == theme.ColorNameBackground {
+		return createColor(40, 44, 52, 255) // 차콜 그레이 배경
+	}
+	if name == theme.ColorNamePrimary {
+		return createColor(0, 123, 255, 255) // 밝은 블루 강조 색상
+	}
+	if name == theme.ColorNameButton {
+		return createColor(60, 179, 113, 255) // 밝은 초록 버튼
+	}
+	return theme.DefaultTheme().Color(name, variant)
+}
+
+func (c customTheme) Font(style fyne.TextStyle) fyne.Resource {
+	return theme.DefaultTheme().Font(style)
+}
+
+func (c customTheme) Size(name fyne.ThemeSizeName) float32 {
+	return theme.DefaultTheme().Size(name)
+}
+
+func (c customTheme) Icon(name fyne.ThemeIconName) fyne.Resource {
+	return theme.DefaultTheme().Icon(name)
+}
+
 func main() {
 	myApp := app.New()
+	myApp.Settings().SetTheme(&customTheme{}) // 사용자 정의 테마 적용
 	myWindow := myApp.NewWindow("다양한 레이아웃 예제")
 
 	// 탭 컨테이너로 레이아웃 전환
